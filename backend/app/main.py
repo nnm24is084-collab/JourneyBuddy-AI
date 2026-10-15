@@ -1,15 +1,22 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.internships import router as internship_router
 
+from app.internships import router as internship_router
 from app.roadmap import router as roadmap_router
+from app.database import initialize_database, list_saved_roadmaps
 
 app = FastAPI(
     title="JourneyBuddy AI",
     description="Your personal learning and career copilot",
-    version="0.2.0",
+    version="0.3.0",
 )
+
+
+@app.on_event("startup")
+def startup():
+    initialize_database()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -40,4 +47,13 @@ def health_check():
     return {
         "status": "healthy",
         "service": "JourneyBuddy AI Backend",
+    }
+
+
+@app.get("/roadmaps/saved")
+def get_saved_roadmaps():
+    roadmaps = list_saved_roadmaps()
+    return {
+        "count": len(roadmaps),
+        "roadmaps": roadmaps,
     }

@@ -1,7 +1,10 @@
+import json
+from typing import List
 
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
-from typing import List
+
+from app.database import save_roadmap
 
 router = APIRouter(
     prefix="/roadmap",
@@ -81,7 +84,7 @@ def create_roadmap(request: RoadmapRequest):
     for index, item in enumerate(roadmap, start=1):
         item["step"] = index
 
-    return {
+    result = {
         "target_role": request.target_role,
         "known_skills": sorted(student_skills),
         "total_steps": len(roadmap),
@@ -91,3 +94,14 @@ def create_roadmap(request: RoadmapRequest):
             "Tasks and durations can be personalized further."
         ),
     }
+
+    saved_id = save_roadmap(
+        request.target_role,
+        json.dumps(sorted(student_skills)),
+        json.dumps(result),
+    )
+
+    result["saved"] = True
+    result["saved_id"] = saved_id
+
+    return result
