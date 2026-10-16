@@ -33,15 +33,15 @@ type RoadmapResponse = {
   notice: string;
 };
 
-
 export default function Home() {
   const [skills, setSkills] = useState("Python, Pandas");
   const [domain, setDomain] = useState("Data Science");
   const [location, setLocation] = useState("Pune");
+
   const [matches, setMatches] = useState<Internship[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [roadmapLoading, setRoadmapLoading] = useState(false);
   const [roadmapError, setRoadmapError] = useState("");
@@ -82,7 +82,6 @@ export default function Home() {
     }
   }
 
-
   async function findMatches() {
     setLoading(true);
     setError("");
@@ -112,7 +111,7 @@ export default function Home() {
       }
 
       const data = await response.json();
-      setMatches(data.matches);
+      setMatches(data.matches || []);
     } catch {
       setError(
         "Could not connect to the backend. Make sure your FastAPI server is running."
@@ -125,9 +124,10 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <a href="#" className="text-2xl font-bold tracking-tight">
+        <a href="/" className="text-2xl font-bold tracking-tight">
           <span className="text-cyan-400">Journey</span>Buddy AI
         </a>
+
         <span className="rounded-full border border-cyan-400/30 px-4 py-2 text-sm text-cyan-300">
           Your career copilot
         </span>
@@ -135,6 +135,27 @@ export default function Home() {
 
       <section className="mx-auto grid max-w-7xl gap-12 px-6 pb-16 pt-12 md:grid-cols-2 md:items-center">
         <div>
+          <nav className="mb-8 flex flex-wrap gap-3">
+            <a
+              href="/"
+              className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950"
+            >
+              Dashboard
+            </a>
+            <a
+              href="/internships"
+              className="rounded-full border border-slate-700 px-4 py-2 text-sm text-white hover:border-cyan-400"
+            >
+              Internships
+            </a>
+            <a
+              href="/roadmap"
+              className="rounded-full border border-slate-700 px-4 py-2 text-sm text-white hover:border-cyan-400"
+            >
+              Roadmap
+            </a>
+          </nav>
+
           <p className="mb-5 text-sm font-semibold uppercase tracking-[0.25em] text-cyan-400">
             Your next chapter starts here
           </p>
@@ -302,9 +323,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-6">
-                  <p className="mb-2 text-sm font-semibold">
-                    Skills you have
-                  </p>
+                  <p className="mb-2 text-sm font-semibold">Skills you have</p>
                   <div className="flex flex-wrap gap-2">
                     {internship.matched_skills.length > 0 ? (
                       internship.matched_skills.map((skill) => (
@@ -324,9 +343,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-5">
-                  <p className="mb-2 text-sm font-semibold">
-                    Skills to learn
-                  </p>
+                  <p className="mb-2 text-sm font-semibold">Skills to learn</p>
                   <div className="flex flex-wrap gap-2">
                     {internship.skill_gaps.length > 0 ? (
                       internship.skill_gaps.map((skill) => (
@@ -354,7 +371,6 @@ export default function Home() {
         </section>
       )}
 
-      
       <section className="mx-auto max-w-7xl px-6 pb-16">
         <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
           <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
@@ -394,7 +410,8 @@ export default function Home() {
 
               {roadmap.roadmap.length === 0 ? (
                 <p className="mt-5 text-emerald-300">
-                  Great! You already have all the skills in this starter roadmap.
+                  Great! You already have all the skills in this starter
+                  roadmap.
                 </p>
               ) : (
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -407,9 +424,7 @@ export default function Home() {
                         STEP {item.step} · {item.duration}
                       </p>
 
-                      <h4 className="mt-3 text-lg font-bold">
-                        {item.skill}
-                      </h4>
+                      <h4 className="mt-3 text-lg font-bold">{item.skill}</h4>
 
                       <p className="mt-3 text-sm leading-6 text-slate-300">
                         {item.task}
@@ -427,9 +442,7 @@ export default function Home() {
                 </div>
               )}
 
-              <p className="mt-6 text-xs text-slate-500">
-                {roadmap.notice}
-              </p>
+              <p className="mt-6 text-xs text-slate-500">{roadmap.notice}</p>
             </div>
           )}
         </div>
