@@ -18,6 +18,15 @@ type MatchResponse = {
   message?: string;
 };
 
+const domains = [
+  "Data Science",
+  "Machine Learning",
+  "Artificial Intelligence",
+  "Web Development",
+  "Software Development",
+  "Internet of Things",
+];
+
 export default function InternshipsPage() {
   const [skills, setSkills] = useState("Python, Pandas, SQL");
   const [domain, setDomain] = useState("Data Science");
@@ -40,7 +49,10 @@ export default function InternshipsPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            skills: skills.split(",").map((skill) => skill.trim()).filter(Boolean),
+            skills: skills
+              .split(",")
+              .map((skill) => skill.trim())
+              .filter(Boolean),
             preferred_domain: domain,
             preferred_location: location,
           }),
@@ -57,98 +69,223 @@ export default function InternshipsPage() {
       setSkillGaps(data.skill_gaps || []);
 
       if (!data.matches?.length) {
-        setMessage(data.message || "No matching internships found. Try different skills or preferences.");
+        setMessage(
+          data.message ||
+            "No matching internships found. Try different skills or preferences."
+        );
       }
     } catch {
-      setMessage("Could not connect to the backend. Make sure your FastAPI server is running.");
+      setMessage(
+        "Could not connect to the backend. Make sure your FastAPI server is running."
+      );
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-5xl">
-        <a href="/" className="text-sm text-cyan-400 hover:text-cyan-300">
-          ← Back to Dashboard
-        </a>
+    <main className="min-h-screen bg-[#f7f7f2] text-[#202b3c]">
+      <header className="border-b border-[#e5e7df] bg-[#fbfbf8]">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
+          <a href="/" className="flex items-center gap-3">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#244b43] text-lg font-bold text-white">
+              J
+            </span>
+            <span className="text-xl font-bold tracking-tight">
+              Journey<span className="text-[#317565]">Buddy</span>
+              <span className="ml-2 text-[10px] font-semibold tracking-wide text-[#6b7280]">
+                STUDENT EDITION
+              </span>
+            </span>
+          </a>
 
-        <header className="mb-8 mt-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-400">
-            JourneyBuddy AI
-          </p>
-          <h1 className="mt-3 text-4xl font-bold">
-            Find Your Next Internship
-          </h1>
-          <p className="mt-3 text-slate-400">
-            Match your skills with internship opportunities and discover skills to improve.
-          </p>
-        </header>
+          <div className="hidden items-center gap-2 sm:flex">
+            <a
+              href="/"
+              className="rounded-full px-4 py-2 text-sm font-medium text-[#586273] transition hover:bg-[#e6efe9] hover:text-[#244b43]"
+            >
+              Dashboard
+            </a>
+            <a
+              href="/internships"
+              className="rounded-full bg-[#e6efe9] px-4 py-2 text-sm font-semibold text-[#244b43]"
+            >
+              Internships
+            </a>
+            <a
+              href="/roadmap"
+              className="rounded-full px-4 py-2 text-sm font-medium text-[#586273] transition hover:bg-[#e6efe9] hover:text-[#244b43]"
+            >
+              Roadmap
+            </a>
+          </div>
+        </nav>
+      </header>
 
-        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          <h2 className="text-xl font-semibold">Your preferences</h2>
+      <div className="mx-auto max-w-7xl px-5 pb-16 pt-8 sm:px-8 sm:pt-12">
+        <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div className="py-3">
+            <a
+              href="/"
+              className="text-sm font-medium text-[#317565] transition hover:text-[#244b43]"
+            >
+              ← Back to Dashboard
+            </a>
 
-          <label className="mt-5 block text-sm text-slate-300">
-            Skills (separate with commas)
-          </label>
-          <input
-            value={skills}
-            onChange={(event) => setSkills(event.target.value)}
-            placeholder="Python, SQL, Machine Learning"
-            className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 outline-none focus:border-cyan-400"
-          />
-
-          <div className="mt-5 grid gap-5 sm:grid-cols-2">
-            <div>
-              <label className="block text-sm text-slate-300">Preferred domain</label>
-              <select
-                value={domain}
-                onChange={(event) => setDomain(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-950 p-3"
-              >
-                <option>Data Science</option>
-                <option>Machine Learning</option>
-                <option>Artificial Intelligence</option>
-                <option>Web Development</option>
-                <option>Software Development</option>
-                <option>Internet of Things</option>
-              </select>
+            <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#d8e4dc] bg-white px-3.5 py-2 text-sm text-[#45645a]">
+              <span className="h-2 w-2 rounded-full bg-[#d29a43]" />
+              Your next opportunity
             </div>
 
-            <div>
-              <label className="block text-sm text-slate-300">Preferred location</label>
-              <input
-                value={location}
-                onChange={(event) => setLocation(event.target.value)}
-                placeholder="Bengaluru, Pune, Hyderabad"
-                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-950 p-3"
-              />
+            <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+              Find work that fits{" "}
+              <span className="font-serif italic text-[#317565]">
+                your skills.
+              </span>
+            </h1>
+
+            <p className="mt-5 max-w-xl text-base leading-7 text-[#687282]">
+              Explore internship examples that align with your interests.
+              Discover the skills you already have and what you could learn
+              next.
+            </p>
+
+            <div className="mt-7 grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-[#e5e7df] bg-white p-4">
+                <span className="text-sm font-semibold text-[#244b43]">
+                  01 · Match
+                </span>
+                <p className="mt-2 text-xs leading-5 text-[#77808d]">
+                  Compare your current skills with roles.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-[#e5e7df] bg-white p-4">
+                <span className="text-sm font-semibold text-[#98641c]">
+                  02 · Improve
+                </span>
+                <p className="mt-2 text-xs leading-5 text-[#77808d]">
+                  Identify useful skills to practise next.
+                </p>
+              </div>
             </div>
           </div>
 
-          <button
-            onClick={findMatches}
-            disabled={loading}
-            className="mt-6 rounded-xl bg-cyan-400 px-6 py-3 font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-50"
-          >
-            {loading ? "Finding matches..." : "Find Internships"}
-          </button>
+          <section className="rounded-[2rem] border border-[#dfe7df] bg-white p-5 shadow-[0_18px_60px_-36px_rgba(35,65,55,0.32)] sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#317565]">
+              Internship matcher
+            </p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight">
+              Tell us what you're looking for
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#77808d]">
+              Adjust your skills and preferences to find relevant matches.
+            </p>
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                void findMatches();
+              }}
+              className="mt-7 space-y-5"
+            >
+              <div>
+                <label
+                  htmlFor="skills"
+                  className="mb-2 block text-sm font-semibold text-[#374151]"
+                >
+                  Skills you know
+                </label>
+                <input
+                  id="skills"
+                  value={skills}
+                  onChange={(event) => setSkills(event.target.value)}
+                  placeholder="Python, SQL, Machine Learning"
+                  required
+                  className="w-full rounded-xl border border-[#dfe4df] bg-[#fbfcfa] px-4 py-3.5 text-sm outline-none transition placeholder:text-[#a2a9b1] focus:border-[#6b9c8c] focus:ring-4 focus:ring-[#317565]/10"
+                />
+                <p className="mt-2 text-xs text-[#8b929c]">
+                  Separate each skill with a comma.
+                </p>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="domain"
+                  className="mb-2 block text-sm font-semibold text-[#374151]"
+                >
+                  Preferred domain
+                </label>
+                <select
+                  id="domain"
+                  value={domain}
+                  onChange={(event) => setDomain(event.target.value)}
+                  className="w-full rounded-xl border border-[#dfe4df] bg-[#fbfcfa] px-4 py-3.5 text-sm outline-none focus:border-[#6b9c8c] focus:ring-4 focus:ring-[#317565]/10"
+                >
+                  {domains.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="location"
+                  className="mb-2 block text-sm font-semibold text-[#374151]"
+                >
+                  Preferred location
+                </label>
+                <input
+                  id="location"
+                  value={location}
+                  onChange={(event) => setLocation(event.target.value)}
+                  placeholder="Bengaluru, Pune, Hyderabad"
+                  className="w-full rounded-xl border border-[#dfe4df] bg-[#fbfcfa] px-4 py-3.5 text-sm outline-none focus:border-[#6b9c8c] focus:ring-4 focus:ring-[#317565]/10"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="group flex w-full items-center justify-center gap-3 rounded-xl bg-[#244b43] px-5 py-4 text-sm font-bold text-white transition hover:bg-[#1c3d36] focus:outline-none focus:ring-4 focus:ring-[#317565]/20 disabled:cursor-wait disabled:opacity-60"
+              >
+                {loading ? "Finding suitable matches…" : "Find internships"}
+                <span className="transition group-hover:translate-x-1">
+                  →
+                </span>
+              </button>
+            </form>
+
+            <div className="mt-5 border-t border-[#edf0eb] pt-4 text-xs leading-5 text-[#8a929c]">
+              These results are examples for exploring your career options,
+              not verified live vacancies.
+            </div>
+          </section>
         </section>
 
         {message && (
-          <p className="mt-6 rounded-xl border border-amber-700 bg-amber-950/40 p-4 text-amber-200">
+          <p
+            role="status"
+            className="mt-8 rounded-2xl border border-[#eadfc9] bg-[#fffaf0] p-4 text-sm leading-6 text-[#8b6b36]"
+          >
             {message}
           </p>
         )}
 
         {skillGaps.length > 0 && (
-          <section className="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold">Skills to improve</h2>
-            <div className="mt-4 flex flex-wrap gap-2">
+          <section className="mt-10 rounded-2xl border border-[#eadfc9] bg-[#fffaf0] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#98641c]">
+              Your learning opportunities
+            </p>
+            <h2 className="mt-2 text-2xl font-bold">
+              Skills worth developing
+            </h2>
+            <div className="mt-5 flex flex-wrap gap-2">
               {skillGaps.map((skill) => (
                 <span
                   key={skill}
-                  className="rounded-full bg-amber-400/10 px-3 py-2 text-sm text-amber-300"
+                  className="rounded-full bg-white px-3.5 py-2 text-sm font-medium text-[#98641c] ring-1 ring-[#eadfc9]"
                 >
                   {skill}
                 </span>
@@ -157,54 +294,118 @@ export default function InternshipsPage() {
           </section>
         )}
 
-        <section className="mt-8">
-          <h2 className="mb-4 text-2xl font-bold">
-            Matching opportunities ({matches.length})
-          </h2>
+        <section className="mt-14" aria-labelledby="results-heading">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#317565]">
+                Your search
+              </p>
+              <h2
+                id="results-heading"
+                className="mt-2 text-3xl font-bold tracking-tight"
+              >
+                Opportunities to explore
+              </h2>
+              <p className="mt-2 text-sm text-[#77808d]">
+                Review the role details and the skills each opportunity lists.
+              </p>
+            </div>
+            <span className="rounded-full border border-[#dfe7df] bg-white px-3.5 py-2 text-sm font-semibold text-[#5f6d66]">
+              {matches.length} {matches.length === 1 ? "result" : "results"}
+            </span>
+          </div>
 
           {matches.length === 0 && !message && (
-            <div className="rounded-2xl border border-dashed border-slate-700 p-8 text-center text-slate-400">
-              Enter your preferences and select Find Internships to see matches.
+            <div className="rounded-2xl border border-dashed border-[#cfdacf] bg-white p-10 text-center">
+              <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-[#e7f0e9] text-xl text-[#317565]">
+                ↗
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">
+                Your next step starts here
+              </h3>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#77808d]">
+                Enter your skills above and select Find Internships to view
+                matching opportunities.
+              </p>
             </div>
           )}
 
-          <div className="grid gap-5 md:grid-cols-2">
+          {matches.length > 0 && (
+            <p className="mb-5 rounded-xl border border-[#eadfc9] bg-[#fffaf0] px-4 py-3 text-xs leading-5 text-[#8b6b36]">
+              These are sample opportunities, not verified live vacancies.
+              Confirm availability and details with the employer before
+              applying.
+            </p>
+          )}
+
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {matches.map((internship, index) => (
               <article
                 key={`${internship.title}-${internship.company}-${index}`}
-                className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
+                className="rounded-2xl border border-[#e2e7e1] bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
               >
-                <p className="text-sm text-cyan-400">{internship.domain}</p>
-                <h3 className="mt-2 text-xl font-semibold">{internship.title}</h3>
-                <p className="mt-2 text-slate-300">{internship.company}</p>
-                <p className="mt-1 text-sm text-slate-400">{internship.location}</p>
+                <span className="inline-flex rounded-full bg-[#e7f0e9] px-3 py-1.5 text-xs font-semibold text-[#317565]">
+                  {internship.domain}
+                </span>
+
+                <h3 className="mt-4 text-xl font-bold leading-snug text-[#263448]">
+                  {internship.title}
+                </h3>
+                <p className="mt-2 font-medium text-[#526071]">
+                  {internship.company}
+                </p>
+                <p className="mt-2 flex items-center gap-2 text-sm text-[#77808d]">
+                  <span aria-hidden="true">⌖</span>
+                  {internship.location}
+                </p>
 
                 {internship.description && (
-                  <p className="mt-4 text-sm leading-6 text-slate-400">
+                  <p className="mt-4 text-sm leading-6 text-[#687282]">
                     {internship.description}
                   </p>
                 )}
 
                 {internship.required_skills?.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {internship.required_skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="rounded-lg bg-slate-800 px-2 py-1 text-xs text-slate-300"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                  <div className="mt-5 border-t border-[#edf0eb] pt-4">
+                    <p className="mb-3 text-xs font-bold uppercase tracking-wide text-[#687282]">
+                      Skills for this role
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {internship.required_skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="rounded-full bg-[#f1f3ee] px-2.5 py-1.5 text-xs font-medium text-[#536357]"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
 
-                <p className="mt-4 text-xs text-amber-300">
-                  Sample opportunity — verify details before applying.
-                </p>
+                <div className="mt-5 rounded-xl bg-[#f7f8f5] px-3.5 py-3 text-xs leading-5 text-[#7b8491]">
+                  Sample listing · Check the employer's official information
+                  before applying.
+                </div>
               </article>
             ))}
           </div>
         </section>
+
+        <footer className="mt-14 flex flex-col gap-3 border-t border-[#e2e7df] pt-6 text-xs text-[#8b929c] sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            JourneyBuddy · A student project for skills and internship
+            planning.
+          </p>
+          <div className="flex gap-4">
+            <a href="/" className="transition hover:text-[#317565]">
+              Dashboard
+            </a>
+            <a href="/roadmap" className="transition hover:text-[#317565]">
+              Roadmap
+            </a>
+          </div>
+        </footer>
       </div>
     </main>
   );
